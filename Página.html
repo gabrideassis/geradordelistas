@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gerador de Listas</title>
+  <style>
+    body {
+      background-image: url("imagem.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #333333;
+    }
+    
+    #opcoes {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    
+    #botao-abrir {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    
+    #botao-abrir:hover {
+      background-color: #45a049;
+    }
+    
+    #logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+  </style>
+  <script>
+    function abrirPagina() {
+      // Obter o valor selecionado
+      var opcaoSelecionada = document.getElementById("opcoes").value;
+      
+      // Redirecionar para a página selecionada
+      if (opcaoSelecionada === "listadf1") {
+        window.location.href = "Lista DF1.html";
+      } else if (opcaoSelecionada === "listadf2") {
+        window.location.href = "Lista DF2.html";
+      } else if (opcaoSelecionada === "listadf3") {
+        window.location.href = "Lista DF3.html";
+      } else if (opcaoSelecionada === "listadf4") {
+        window.location.href = "Lista DF4.html";
+      } else if (opcaoSelecionada === "listat1") {
+        window.location.href = "Lista T1.html";
+      } else if (opcaoSelecionada === "listat2") {
+        window.location.href = "Lista T2.html";
+      } else if (opcaoSelecionada === "listat3") {
+        window.location.href = "Lista T3.html";
+      } else if (opcaoSelecionada === "listat4") {
+        window.location.href = "Lista T4.html";
+      } else if (opcaoSelecionada === "listaae1") {
+        window.location.href = "Lista AE1.html";
+      } else if (opcaoSelecionada === "listaae2") {
+        window.location.href = "Lista AE2.html";
+      } else if (opcaoSelecionada === "listac1") {
+        window.location.href = "Lista C1.html";
+      } else if (opcaoSelecionada === "listac2") {
+        window.location.href = "Lista C2.html";
+      } else if (opcaoSelecionada === "listac3") {
+        window.location.href = "Lista C3.html";
+      } else if (opcaoSelecionada === "listac4") {
+        window.location.href = "Lista C4.html";
+      } else if (opcaoSelecionada === "listar1") {
+        window.location.href = "Lista R1.html";
+      } else if (opcaoSelecionada === "listar2") {
+        window.location.href = "Lista R2.html";
+      } else if (opcaoSelecionada === "listar3") {
+        window.location.href = "Lista R3.html";
+      } 
+      
+      // Adicione mais condições conforme necessário para outras opções
+    }
+  </script>
+</head>
+<body>
+  <h1>Gerador de Listas</h1>
+  
+  <select id="opcoes">
+    <option value="">Selecione uma Lista</option>
+    <option value="listat1">Lista T1</option>
+    <option value="listat2">Lista T2</option>
+    <option value="listat3">Lista T3</option>
+    <option value="listat4">Lista T4</option>
+    <option value="listaae1">Lista AE1</option>
+    <option value="listaae2">Lista AE2</option>
+    <option value="listadf1">Lista DF1</option>
+    <option value="listadf2">Lista DF2</option>
+    <option value="listadf3">Lista DF3</option>
+    <option value="listadf4">Lista DF4</option>
+    <option value="listar1">Lista R1</option>
+    <option value="listar2">Lista R2</option>
+    <option value="listar3">Lista R3</option>
+    <option value="listac1">Lista C1</option>
+    <option value="listac2">Lista C2</option>
+    <option value="listac3">Lista C3</option>
+    <option value="listac4">Lista C4</option>
+  </select>
+  
+  <button id="botao-abrir" onclick="abrirPagina()">Abrir</button>
+
+  <img src="logo.png" id="logo" alt="Logo">
+
+</body>
+</html>

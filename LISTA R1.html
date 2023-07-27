@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista R1</title>
+  <style>
+    body {
+      background-image: url("imagem.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #333333;
+    }
+    
+    #opcoes {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    
+    #limpar {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    #exibir {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    #copiar {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    #gerarPDF {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    
+    #copiar:hover {
+      background-color: #45a049;
+    }
+    #exibir:hover {
+      background-color: #45a049;
+    }
+    #limpar:hover {
+      background-color: #45a049;
+    }
+    #gerarPDF:hover {
+      background-color: #45a049;
+    }
+       
+    #logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+    }
+
+    .resposta-container {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .resposta-box {
+      width: 1300px;
+      height: 300px;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ccc;
+      overflow: auto;
+      text-align: left;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+  <script>
+    function exibirMensagem() {
+      var verificarFalecido = document.getElementById("verificarFalecido").value;
+      var verificarPagante = document.getElementById("verificarPagante").value;
+      
+      var resposta = "";
+      if (verificarFalecido === "Sim"){
+        resposta += "Documentos do Titular (Falecido): Cópia do RG (Carteira de Identidade), CPF e comprovante de residência atualizado (últimos 3 meses) ou Declaração de residência (Anexo)";
+      } else {
+        resposta += "Documentos do Titular: Cópia do RG (Carteira de Identidade), CPF e comprovante de residência atualizado (últimos 3 meses) ou Declaração de residência (Anexo)";
+      }
+      resposta += "";
+
+      if (verificarPagante == "Sim"){
+        resposta += "\n\nCópia das Notas Fiscais e Autorização de crédito (Anexo) totalmente preenchida em nome do Titular"
+      } else {
+        resposta += "\n\nCópia do RG (Carteira de Identidade), CPF e Autorização de crédito (Anexo) totalmente preenchida do Pagante do funeral, ao qual o nome conste nas Notas Fiscais"
+      }
+      resposta += "";
+
+      var respostaElement = document.getElementById("resposta");
+      respostaElement.textContent = resposta;
+      respostaElement.style.display = "block";
+    }
+
+    
+    function habilitarPagante() {
+      var verificarFalecido= document.getElementById("verificarFalecido").value;
+      
+      if (verificarFalecido === "Não") {
+        verificarPagante.disabled = false;
+      } else {
+        verificarFalecido.disabled = true;
+        verificarFalecido.value = "";
+      }
+    }
+    function limparOpcoes() {
+      document.getElementById("verificarFalecido").value = "";
+      document.getElementById("verificarPagante").value = "";
+
+      // Desabilita e redefine o valor do campo "O pagante do funeral é o Titular?"
+      var verificarPagante = document.getElementById("verificarPagante");
+      verificarPagante.disabled = true;
+      verificarPagante.value = "";
+
+      // Limpa a resposta
+      document.getElementById("resposta").textContent = "";
+    }
+    function copiarResposta() {
+      var respostaText = document.getElementById("resposta").textContent;
+      navigator.clipboard.writeText(respostaText).then(function() {
+        alert("A lista personalizada foi copiada");
+      }, function() {
+        alert("Não foi possível copiar o texto");
+      });
+    }
+
+    // Função para gerar o PDF
+    function gerarPDF() {
+      var respostaText = document.getElementById("resposta").textContent;
+    
+      var doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
+    
+      doc.setFontSize(12); // Tamanho da fonte
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 50, 101); // Cor do texto (RGB)
+    
+      var boldText = "Listagem dos documentos necessários:";
+      var regularText = respostaText.replace(boldText, ""); // Remove o trecho em negrito do texto completo
+    
+      doc.text(boldText, 10, 10); // Adiciona o texto acima da resposta em negrito
+      doc.setFontStyle("normal"); // Define o estilo de fonte como normal para o restante do texto
+      doc.setFont("helvetica")
+      var lines = doc.splitTextToSize(regularText, 180); // 190 é a largura máxima do texto em mm
+      doc.text(lines, 10, 20); // Adiciona o texto da resposta abaixo do texto anterior
+    
+      doc.save("resposta.pdf");
+    }       
+  </script>
+</head>
+<body>
+  <h1>Lista R1</h1>
+
+  <!-- Pergunta: O falecido é o Titular?-->
+  <label for="verificarFalecido">O falecido é o Titular?</label>
+  <select id="verificarFalecido" onchange="habilitarPagante()">
+    <option value="">Selecione uma opção</option>
+    <option value="Sim">Sim</option>
+    <option value="Não">Não</option>
+  </select>
+  <label></label>
+ <!-- Pergunta: As Notas Fiscais estão no nome do Titular? -->
+  <label for="verificarPagante">O pagante do funeral é o Titular?</label>
+  <select id="verificarPagante" disabled>
+    <option value="">Selecione uma opção</option>
+    <option value="Sim">Sim</option>
+    <option value="Não">Não</option>
+  </select>
+  <label></label>
+
+  
+  <!-- Botões -->
+  <button id="exibir" onclick="exibirMensagem()">Exibir Documentos</button>
+  <button id= "limpar" onclick="limparOpcoes()">Limpar</button>
+  <button id= "copiar" onclick="copiarResposta()">Copiar</button>
+  <button id="gerarPDF" onclick="gerarPDF()">Gerar PDF</button>
+  <img src="logo.png" id="logo" alt="Logo">
+  <!-- Resposta -->
+  <div class="resposta-container">
+    <pre id="resposta" class="resposta-box"></pre>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
+</body>
+</html>

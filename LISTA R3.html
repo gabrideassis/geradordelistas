@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista R3</title>
+  <style>
+    body {
+      background-image: url("imagem.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #333333;
+    }
+    
+    #opcoes {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    
+    #limpar {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    #exibir {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    #copiar {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    #gerarPDF {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    
+    #copiar:hover {
+      background-color: #45a049;
+    }
+    #exibir:hover {
+      background-color: #45a049;
+    }
+    #limpar:hover {
+      background-color: #45a049;
+    }
+    #gerarPDF:hover {
+      background-color: #45a049;
+    }
+       
+    #logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+    }
+
+    .resposta-container {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .resposta-box {
+      width: 1300px;
+      height: 300px;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ccc;
+      overflow: auto;
+      text-align: left;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+  <script>
+    function exibirMensagem() {
+      var estadoCivil = document.getElementById("estadoCivil").value;
+      var possuiFilhos = document.getElementById("possuiFilhos").value;
+      var possuiPaisVivos = document.getElementById("possuiPaisVivos").value;
+      var possuiIrmaos = document.getElementById("possuiIrmaos").value;
+      var viveMaritalmente = document.getElementById("viveMaritalmente").value;
+      var verificarVinculo = document.getElementById("verificarVinculo").value;
+      
+
+      var resposta = "";
+      if (estadoCivil === 'Casado') {
+        resposta += "Documentos do Titular: Cópia do RG (Carteira de Identidade), CPF, Certidão de Casamento e comprovante de residência atualizado (últimos 3 meses) ou Declaração de residência (Anexo)";
+      } else if (estadoCivil === 'Solteiro') {
+        resposta += "Documentos do Titular: Cópia do RG (Carteira de Identidade), CPF, Certidão de Nascimento e comprovante de residência atualizado (últimos 3 meses) ou Declaração de residência (Anexo)";
+      } else if (estadoCivil === 'Viúvo') {
+        resposta += "Documentos do Titular: Cópia do RG (Carteira de Identidade), CPF, Certidão de Casamento, Certidão de óbito do cônjuge e comprovante de residência atualizado (últimos 3 meses) ou Declaração de residência (Anexo)";
+      } else if (estadoCivil === 'Divorciado') {
+        resposta += "Documentos do Titular: Cópia do RG (Carteira de Identidade), CPF, Certidão de Casamento (Com averbação do divórcio) e comprovante de residência atualizado (últimos 3 meses) ou Declaração de residência (Anexo)";
+      }
+
+      resposta += "";
+      if (possuiIrmaos === "Sim") {
+            resposta += "\n\nDocumentos do(s) pai(s): Cópia do óbito dos Pais\n\nDocumentos do(s) irmão(s): Cópia do RG (Carteira de Identidade), CPF e Autorização de crédito (Anexo) totalmente preenchida";
+        
+        } else if (possuiPaisVivos === "PaiVivoMaeFalecida") {
+          resposta += "\n\nDocumentos do(s) pai(s): Cópia do RG (Carteira de Identidade), CPF e Autorização de crédito (Anexo) totalmente preenchida do Pai e Cópia da Certidão de óbito da Mãe";      
+        } else if (possuiPaisVivos === "MaeVivaPaiFalecido") {
+          resposta += "\n\nDocumentos do(s) pai(s): Cópia do RG (Carteira de Identidade), CPF e Autorização de crédito (Anexo) totalmente preenchida da Mãe e Cópia da Certidão de óbito do Pai";
+        } else if (possuiPaisVivos === "AmbosVivos") {
+          resposta += "\n\nDocumentos do(s) pai(s): Cópia do RG (Carteira de Identidade), CPF e Autorização de crédito (Anexo) totalmente preenchida do Pai e da Mãe";
+        } else if (possuiPaisVivos === "AmbosFalecidos") {
+          resposta += "\n\nDocumentos do(s) pai(s): Cópia do óbito dos Pais";
+
+        } else if (possuiFilhos === "Sim") {
+          resposta += "\n\nDocumentos do(s) filho(s): Cópia do RG (Carteira de Identidade), CPF e Autorização de crédito (Anexo) totalmente preenchida";
+        
+        } else {
+          resposta += ""
+        }
+
+
+      if ((viveMaritalmente === "Sim") && (estadoCivil !== "Casado")) {
+        resposta += "\n\nDocumentos do cônjuge: Cópia do RG (Carteira de Identidade), CPF, Certidão de Nascimento ou Casamento e Autorização de crédito (Anexo) totalmente preenchida\n\nEscritura pública declaratória de união estável (Registrada em Cartório) ou Declaração de União Estável (Modelo da Sinaf Anexo)";
+      } else {
+        resposta += "";
+      }
+
+      if (viveMaritalmente === "Sim") {
+        resposta += "";
+        if (verificarVinculo === "Não") {
+          resposta += "\n\nDocumentos do cônjuge: Cópia do RG (Carteira de Identidade), CPF, Certidão de Nascimento ou Casamento e Autorização de crédito (Anexo) totalmente preenchida\n\nEscritura pública declaratória de união estável (Registrada em Cartório) ou Declaração de União Estável (Modelo da Sinaf Anexo)";
+        } else if (verificarVinculo === "Sim") {
+          resposta += "\n\nDocumentos do cônjuge: Cópia do RG (Carteira de Identidade), CPF e Autorização de crédito (Anexo) totalmente preenchida";
+        }
+      } else {
+        resposta += "";
+      }
+      
+
+      var respostaElement = document.getElementById("resposta");
+      respostaElement.textContent = resposta;
+      respostaElement.style.display = "block";
+    }
+    function habilitardependentes() {
+      habilitarPaisVivos();
+      habilitarIrmaos();
+      habilitarVinculo();
+    } 
+
+    function habilitarPaisVivos() {
+      var possuiFilhos = document.getElementById("possuiFilhos").value
+      var viveMaritalmente = document.getElementById("viveMaritalmente").value;
+      var possuiPaisVivos = document.getElementById("possuiPaisVivos")
+
+
+      if ((possuiFilhos === "Não") && (viveMaritalmente === "Não")) {
+        possuiPaisVivos.disabled = false;
+      } else {
+        possuiPaisVivos.disabled = true;
+        possuiPaisVivos.value = ""
+      }
+
+    }
+
+    function habilitarIrmaos() {
+      var possuiPaisVivos = document.getElementById("possuiPaisVivos").value;
+      var viveMaritalmente = document.getElementById("viveMaritalmente").value;
+      var possuiIrmaos = document.getElementById("possuiIrmaos");
+
+      if (possuiPaisVivos === "AmbosFalecidos" && viveMaritalmente === "Não") {
+        possuiIrmaos.disabled = false;
+      } else {
+        possuiIrmaos.disabled = true;
+        possuiIrmaos.value = "";
+      }
+    }
+    function habilitarVinculo() {
+      var viveMaritalmente = document.getElementById("viveMaritalmente");
+      var verificarVinculo = document.getElementById("verificarVinculo");
+      var estadoCivil = document.getElementById("estadoCivil")
+
+      if (viveMaritalmente.value === "Sim" && estadoCivil.value === "Casado") {
+        verificarVinculo.disabled = false;
+      } else {
+        verificarVinculo.disabled = true;
+        verificarVinculo.value = "";
+      }
+    }
+    
+    function limparOpcoes() {
+      document.getElementById("estadoCivil").value = "";
+      document.getElementById("possuiFilhos").value = "";
+      document.getElementById("possuiPaisVivos").value = "";
+      document.getElementById("viveMaritalmente").value = "";
+      document.getElementById("verificarVinculo").value = "";
+
+      document.getElementById("resposta").textContent = "";
+    }
+    function copiarResposta() {
+      var respostaText = document.getElementById("resposta").textContent;
+      navigator.clipboard.writeText(respostaText).then(function() {
+        alert("A lista personalizada foi copiada");
+      }, function() {
+        alert("Não foi possível copiar o texto");
+      });
+    }
+
+    // Função para gerar o PDF
+    function gerarPDF() {
+      var respostaText = document.getElementById("resposta").textContent;
+    
+      var doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
+    
+      doc.setFontSize(12); // Tamanho da fonte
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 50, 101); // Cor do texto (RGB)
+    
+      var boldText = "Listagem dos documentos necessários:";
+      var regularText = respostaText.replace(boldText, ""); // Remove o trecho em negrito do texto completo
+    
+      doc.text(boldText, 10, 10); // Adiciona o texto acima da resposta em negrito
+      doc.setFontStyle("normal"); // Define o estilo de fonte como normal para o restante do texto
+      doc.setFont("helvetica")
+      var lines = doc.splitTextToSize(regularText, 180); // 190 é a largura máxima do texto em mm
+      doc.text(lines, 10, 20); // Adiciona o texto da resposta abaixo do texto anterior
+    
+      doc.save("resposta.pdf");
+    }       
+  </script>
+</head>
+<body>
+  <h1>Lista R3</h1>
+
+  <!-- Pergunta: Qual é o estado Civil do falecido? -->
+  <label for="estadoCivil">Qual é o estado Civil do falecido?</label>
+  <select id="estadoCivil" onchange="habilitardependentes()">
+    <option value="">Selecione uma opção</option>
+    <option value="Casado">Casado</option>
+    <option value="Solteiro">Solteiro</option>
+    <option value="Viúvo">Viúvo</option>
+    <option value="Divorciado">Divorciado</option>
+  </select>
+  <label></label>
+ <!-- Pergunta: Vive maritalmente com alguém? -->
+  <label for="viveMaritalmente">Vive maritalmente com alguém?</label>
+  <select id="viveMaritalmente" onchange="habilitardependentes()">
+    <option value="">Selecione uma opção</option>
+    <option value="Sim">Sim</option>
+    <option value="Não">Não</option>
+  </select>
+  <label></label>
+  <!-- Pergunta: É casado com esta pessoa? -->
+  <label for="verificarVinculo">É casado com esta pessoa?</label>
+  <select id="verificarVinculo" disabled>
+    <option value="">Selecione uma opção</option>
+    <option value="Sim">Sim</option>
+    <option value="Não">Não</option>
+  </select>
+  <label></label>
+  <!-- Pergunta: Possui filhos? (Habilitada somente se a resposta do beneficiário for "Não") -->
+  <label for="possuiFilhos">Possui filhos?</label>
+  <select id="possuiFilhos" onchange="habilitardependentes()">
+    <option value="">Selecione uma opção</option>
+    <option value="Sim">Sim</option>
+    <option value="Não">Não</option>
+  </select>
+  <label></label>
+  <!-- Pergunta: Possui pais vivos? (Habilitada somente se a resposta do beneficiário for "Não" e a resposta de possuir filhos for "Não") -->
+  <label for="possuiPaisVivos">Possui pais vivos?</label>
+  <select id="possuiPaisVivos" onchange="habilitardependentes()" disabled>
+    <option value="">Selecione uma opção</option>
+    <option value="PaiVivoMaeFalecida">Pai vivo, Mãe Falecida</option>
+    <option value="MaeVivaPaiFalecido">Mãe viva, Pai Falecido</option>
+    <option value="AmbosVivos">Ambos Vivos</option>
+    <option value="AmbosFalecidos">Ambos falecidos</option>
+  </select>
+  <label></label>
+  <!-- Pergunta: Possui pais irmãos? (Habilitada somente se a resposta do beneficiário for "Não", a resposta de possuir filhos for "Não" e a resposta de possuir pais vivos for "Não") -->
+  <label for="possuiIrmaos">Possui irmãos?</label>
+  <select id="possuiIrmaos" onchange="habilitardependentes()" disabled>
+    <option value="">Selecione uma opção</option>
+    <option value="Sim">Sim</option>
+    <option value="Não">Não</option>
+  </select>
+  <label></label>
+
+  
+  <!-- Botões -->
+  <button id="exibir" onclick="exibirMensagem()">Exibir Documentos</button>
+  <button id= "limpar" onclick="limparOpcoes()">Limpar</button>
+  <button id= "copiar" onclick="copiarResposta()">Copiar</button>
+  <button id="gerarPDF" onclick="gerarPDF()">Gerar PDF</button>
+  <img src="logo.png" id="logo" alt="Logo">
+  <!-- Resposta -->
+  <div class="resposta-container">
+    <pre id="resposta" class="resposta-box"></pre>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
+</body>
+</html>
